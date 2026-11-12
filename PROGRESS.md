@@ -37,6 +37,17 @@ Update this at the end of every session. Share it at the start of every new chat
 - Exercises come from a shared list (catalogue), the user does not type the name freely
 - Set is the entity that connects things: it holds workoutId and exerciseId. Exercise holds no foreign keys
 - This project uses terminal Git and GitHub, separate from the work setup
+- Finish workout is the save, there is no separate save button
+- Workout has no title, the Workout Page shows its date
+- Workout gets a finished field (true/false) so the app knows if a workout is still in progress
+- Only one unfinished workout at a time. The main screen button continues it, and "Current workout" in the burger shows only while one exists
+- Editing reps and weight happens on the Workout Page by tapping a set. History only shows workouts
+- Search for exercises stays later (story 5), version 1 picks from the list
+- Sign-up is its own screen
+- The backend sets the date of a new workout to today, the user does not pick it
+- Adding an exercise sends one request for each set (POST /sets)
+- Progress chart shows the heaviest set of each day
+- Nothing can be deleted in version 1
 
 ## Things I learned (in my own words)
 
