@@ -5,8 +5,8 @@ Update this at the end of every session. Share it at the start of every new chat
 ## Where I am
 
 - Current week: 1 (setup, Git basics, design on paper)
-- Last session: 2026-11-12 - made github account, installed git, node and chrome. made git repo and pushed files to it. wrote user stories and designed the data model (see DESIGN.md)
-- Next step: Day 2 - design question 3: sketch the screens (boxes on paper), then question 4: what travels between screens and data (API endpoints)
+- Last session: 2026-11-12 - made github account, installed git, node and chrome. made git repo and pushed files to it. wrote user stories and designed the data model, the screens and the API endpoints (see DESIGN.md)
+- Next step: Day 3 - design question 5: what is the thinnest version that works end to end
 
 ## Day 1 checklist
 
@@ -23,6 +23,8 @@ Update this at the end of every session. Share it at the start of every new chat
 - Practised the daily loop: edit -> git add -> git commit -> git push
 - Design question 1 done: user stories, each tagged must or later (DESIGN.md)
 - Design question 2 done: data model with 4 entities - User, Workout, Exercise, Set (DESIGN.md)
+- Design question 3 done: 6 screens, each with Shows / Actions / Exits (DESIGN.md)
+- Design question 4 done: 11 API endpoints (DESIGN.md)
 
 ## Decisions made
 
