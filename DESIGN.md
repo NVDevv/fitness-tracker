@@ -182,3 +182,61 @@ Nothing is deleted in version 1, so there is no DELETE.
     Used by: Progress Page, after choosing an exercise (12)
     Request: nothing
     Response: one point for each day [{ date, weight }], weight is the heaviest set of that day
+
+## Thinnest version
+
+## Demo
+
+I open the app and tap the workout button. On the Workout Page I add an exercise with reps and weight, and it shows up in the list. I refresh the page and it is still there.
+
+## Stories
+
+in = built for real, fake = cheapest stand-in, cut = left out for now
+
+1. Sign-up -> fake. One user is written directly in the backend, every request belongs to that user.
+2. Log-in -> fake. Same user, the app opens straight on the Main Screen.
+3. Create new workout -> in
+4. Pick an exercise from the list -> in. The list is a few exercises written by hand.
+6. Track reps, weight and sets -> in. The popup adds one set at a time.
+7. Edit reps and weight -> cut
+8. Save the exercise to the workout -> in
+9. Finish workout -> cut
+10. Log out -> cut
+11. History -> cut
+12. Progress chart -> cut
+
+## What the slice touches
+
+Screens
+    Main Screen, only the workout button. No burger. The button always creates a new workout.
+    Workout Page, without editing a set and without the finish button.
+
+Endpoints
+    5. POST /workouts
+    6. GET /workouts/:id
+    8. GET /exercises
+    9. POST /sets
+
+Entities
+    Workout -> real
+    Set -> real
+    Exercise -> real, but only a few rows written by hand
+    User -> fake, one user written in the backend
+
+## The walk
+
+1. Main Screen: tap the workout button -> POST /workouts -> a new Workout is created with today's date and finished false.
+2. The app opens the Workout Page for that workout -> GET /workouts/:id -> shows the date and an empty list.
+3. Workout Page: tap add exercise -> GET /exercises -> shows the list of exercises.
+4. Choose an exercise, enter reps and weight, tap add -> POST /sets -> a new Set is created with that workoutId and exerciseId.
+5. The Workout Page asks again -> GET /workouts/:id -> the set shows up under its exercise.
+6. Refresh the page -> GET /workouts/:id -> the same workout and set come back.
+
+## Widening order
+
+1. Finish workout (9), with GET /workouts so the main button continues an unfinished workout. A workout now has a start and an end.
+2. Several sets in one popup (6). Same endpoint, sent once for each set.
+3. Edit a set (7). Small, and it stays on the Workout Page.
+4. History (11) and the burger. Needs finished workouts, and the burger is needed as soon as there is a second page to go to.
+5. Progress chart (12). Needs workouts on several days to show anything.
+6. Sign-up, log-in, log out (1, 2, 10). Week 6 in the roadmap, replaces the fake user.
