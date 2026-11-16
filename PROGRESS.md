@@ -4,9 +4,9 @@ Update this at the end of every session. Share it at the start of every new chat
 
 ## Where I am
 
-- Current week: 1 (setup, Git basics, design on paper)
-- Last session: 2026-11-12 - made github account, installed git, node and chrome. made git repo and pushed files to it. wrote user stories and designed the data model, the screens and the API endpoints (see DESIGN.md)
-- Next step: Day 3 - design question 5: what is the thinnest version that works end to end
+- Current week: 2 (learn React, build the screens with fake data)
+- Last session: 2026-11-16 - finished design question 5, the thinnest version that works end to end (see DESIGN.md). Week 1 is done
+- Next step: Week 2, Day 1 - create the React + Vite project in a frontend folder, run it and change one thing on the page
 
 ## Day 1 checklist
 
@@ -25,6 +25,7 @@ Update this at the end of every session. Share it at the start of every new chat
 - Design question 2 done: data model with 4 entities - User, Workout, Exercise, Set (DESIGN.md)
 - Design question 3 done: 6 screens, each with Shows / Actions / Exits (DESIGN.md)
 - Design question 4 done: 11 API endpoints (DESIGN.md)
+- Design question 5 done: thinnest version - 2 screens, 4 endpoints, and the order to widen it (DESIGN.md)
 
 ## Decisions made
 
@@ -50,6 +51,9 @@ Update this at the end of every session. Share it at the start of every new chat
 - Adding an exercise sends one request for each set (POST /sets)
 - Progress chart shows the heaviest set of each day
 - Nothing can be deleted in version 1
+- Thinnest version: tap the workout button, add an exercise with reps and weight, see it in the list, refresh and it is still there
+- In the thinnest version the user is faked (one user written in the backend). Sign-up, log-in and log out come in week 6
+- In the thinnest version the popup adds one set at a time and the main button always creates a new workout
 
 ## Things I learned (in my own words)
 
