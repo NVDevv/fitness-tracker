@@ -4,10 +4,10 @@ Update this at the end of every session. Share it at the start of every new chat
 
 ## Where I am
 
-- Current week: 2 finished (React with fake data). Week 3 is next (backend)
-- Last session: 2026-11-24 - learned props and a function as a prop (child tells parent). The Start button now switches to the Workout Page. On the Workout Page: sets live in state, controlled inputs for reps and weight, exercise dropdown, and a popup form (open/close with a boolean state) that adds a set. From this session on, lessons are in US English
-- Next step: Week 3 - start the backend. Learn what a backend and an API are, then set up backend/ with Node.js + Express + TypeScript and make the first endpoint. Order follows the thinnest version in DESIGN.md: GET /exercises first (simplest, a hand-written list), then POST /workouts, GET /workouts/:id, POST /sets
-- Optional small cleanups on the frontend, can wait: Cancel in the popup does not clear the typed text; the form could become its own component later (YAGNI for now)
+- Current week: 3 (backend). The 4 endpoints of the thinnest version are written in backend/src/index.ts, data kept in plain arrays (lost on restart). Week 4 (database) is next
+- Last session: 2026-11-24 - learned what a backend, an API, HTTP and JSON are. Set up backend/ (Express 5 + TypeScript + tsx), wrote GET /exercises, POST /workouts, GET /workouts/:id (with real sets and exerciseName) and POST /sets. Tested with curl.exe and the browser. Debugged: arrow function with braces and no return, wrong response shape, name shadowing, find/map mixed up, curl quoting in cmd.exe
+- Next step: 1) Run the full curl walk once more (create workout, add 2 sets, GET /workouts/1, a second workout stays separate) and commit backend/src/index.ts if not done yet. 2) Then decide with the teacher: either connect the frontend to this backend now (week 5 work, gives the first full demo from DESIGN.md "The walk") or go on to week 4 (PostgreSQL + Prisma). Roadmap order is database first, but the thinnest-version idea says an end-to-end demo early is worth it
+- Optional small cleanups, can wait: backend - validate reps/weight types in POST /sets (week 7). Frontend - Cancel in the popup does not clear the typed text; the form could become its own component later (YAGNI for now)
 
 ## Day 1 checklist
 
@@ -36,6 +36,12 @@ Update this at the end of every session. Share it at the start of every new chat
 - Week 2: controlled inputs for reps and weight, Add button builds a new set and adds it with the spread pattern
 - Week 2: Exercise type and a hand-written exercises list, dropdown stores the chosen exercise id, the name is found with .find()
 - Week 2: popup form on the Workout Page, shown or hidden by a boolean state, closes and clears after Add
+- Week 3: backend/ project created (npm init, Express, TypeScript, tsx, @types), own .gitignore, `npm run dev` runs tsx watch on src/index.ts, port 3000
+- Week 3: GET /exercises (hand-written list in a const outside the handler)
+- Week 3: POST /workouts (date = today as YYYY-MM-DD, finished false, id counter, status 201)
+- Week 3: GET /workouts/:id (route param converted with Number, 404 when missing, returns the workout plus its sets)
+- Week 3: POST /sets (body read with express.json(), 404 if the workout or the exercise does not exist, status 201)
+- Week 3: sets in the GET response built with .filter (sets of this workout) and .map (add exerciseName with .find)
 
 ## Decisions made
 
@@ -73,6 +79,12 @@ Update this at the end of every session. Share it at the start of every new chat
 - The popup is a plain form shown or hidden with a boolean state. A styled overlay popup can wait
 - Variable names start lowercase, capitals are for types and components. State is named [thing, setThing]
 - Lessons are in US English from now on
+- Until week 4 the backend keeps data in arrays in memory. The database replaces the arrays later, the routes should barely change
+- The set type in code is named WorkoutSet (Set is a built-in JavaScript type)
+- New workout date is the UTC date from toISOString. Known small limitation (late evening can show tomorrow), fine for version 1
+- POST /sets only checks that the workout and the exercise exist. Checking reps/weight types waits for week 7
+- Counters are named newWorkoutId and newSetsId so they do not clash with names from req.body
+- Testing without the frontend: browser for GET, curl.exe for POST. In cmd.exe wrap the JSON in double quotes and escape the inner ones with a backslash (Thunder Client in VS Code is the no-quoting alternative)
 
 ## Things I learned (in my own words)
 
@@ -82,3 +94,4 @@ Update this at the end of every session. Share it at the start of every new chat
 ## Open questions / things that confused me
 
 - None right now (the props question was answered in week 2)
+- Suggested points for your own "Things I learned" (write them in your words): what a backend, an API, HTTP and JSON are; what a route is (method + path); req.params vs req.body; why express.json() is needed; status codes 201 and 404; why an arrow function with braces needs return; what .filter, .map and .find each do and how they combine; what ?. does; why TypeScript did not catch logic bugs
