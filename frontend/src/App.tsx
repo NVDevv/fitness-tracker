@@ -6,7 +6,7 @@ import { useState } from "react";
 type Page = "MainScreen" | "WorkoutPage";
 
 function App() {
-	const [pageDecider, setPage] = useState<Page>("MainScreen");
+	const [page, setPage] = useState<Page>("MainScreen");
 
 	return (
 		<>
@@ -19,8 +19,15 @@ function App() {
 					gap: "12px",
 				}}
 			>
-				{pageDecider === "MainScreen" ? <MainScreen /> : <WorkoutPage />}
-				<button onClick={() => setPage("WorkoutPage")}>Switch pages</button>
+				{page === "MainScreen" ? (
+					<MainScreen
+						onStart={() => {
+							setPage("WorkoutPage");
+						}}
+					/>
+				) : (
+					<WorkoutPage />
+				)}
 			</div>
 		</>
 	);

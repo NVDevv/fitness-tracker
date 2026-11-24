@@ -4,9 +4,10 @@ Update this at the end of every session. Share it at the start of every new chat
 
 ## Where I am
 
-- Current week: 2 (learn React, build the screens with fake data)
-- Last session: 2026-11-23 - made the React + Vite project in frontend/. Built the Main Screen and the Workout Page with fake data. Learned state and made App switch pages with a temporary button
-- Next step: Week 2 - props. Make the real Start button in MainScreen switch to the Workout Page (MainScreen gets an on-start function prop from App), then delete the temporary button in App
+- Current week: 2 finished (React with fake data). Week 3 is next (backend)
+- Last session: 2026-11-24 - learned props and a function as a prop (child tells parent). The Start button now switches to the Workout Page. On the Workout Page: sets live in state, controlled inputs for reps and weight, exercise dropdown, and a popup form (open/close with a boolean state) that adds a set. From this session on, lessons are in US English
+- Next step: Week 3 - start the backend. Learn what a backend and an API are, then set up backend/ with Node.js + Express + TypeScript and make the first endpoint. Order follows the thinnest version in DESIGN.md: GET /exercises first (simplest, a hand-written list), then POST /workouts, GET /workouts/:id, POST /sets
+- Optional small cleanups on the frontend, can wait: Cancel in the popup does not clear the typed text; the form could become its own component later (YAGNI for now)
 
 ## Day 1 checklist
 
@@ -30,6 +31,11 @@ Update this at the end of every session. Share it at the start of every new chat
 - Week 2: MainScreen component (heading + Start button, no behaviour yet)
 - Week 2: WorkoutPage with types (Workout, WorkoutSet) and a fake workout, list made with .map and key
 - Week 2: App holds the state for which page shows, switched by a temporary button
+- Week 2: props - MainScreen takes an onStartClick function prop from App, the real Start button switches the page, temporary button deleted
+- Week 2: Workout Page sets moved into state (useState with the fake sets as the starting value)
+- Week 2: controlled inputs for reps and weight, Add button builds a new set and adds it with the spread pattern
+- Week 2: Exercise type and a hand-written exercises list, dropdown stores the chosen exercise id, the name is found with .find()
+- Week 2: popup form on the Workout Page, shown or hidden by a boolean state, closes and clears after Add
 
 ## Decisions made
 
@@ -61,6 +67,12 @@ Update this at the end of every session. Share it at the start of every new chat
 - Thinnest version: tap the workout button, add an exercise with reps and weight, see it in the list, refresh and it is still there
 - In the thinnest version the user is faked (one user written in the backend). Sign-up, log-in and log out come in week 6
 - In the thinnest version the popup adds one set at a time and the main button always creates a new workout
+- Data flows down through props, and a child tells its parent by calling a function the parent passed as a prop
+- Data that changes lives in state. The starting constant is only the starting value, everything after reads the state
+- The set stores exerciseId, the exercise name is looked up from the list (one source of truth)
+- The popup is a plain form shown or hidden with a boolean state. A styled overlay popup can wait
+- Variable names start lowercase, capitals are for types and components. State is named [thing, setThing]
+- Lessons are in US English from now on
 
 ## Things I learned (in my own words)
 
@@ -69,4 +81,4 @@ Update this at the end of every session. Share it at the start of every new chat
 
 ## Open questions / things that confused me
 
-- Props: how does a child component tell its parent that something happened
+- None right now (the props question was answered in week 2)

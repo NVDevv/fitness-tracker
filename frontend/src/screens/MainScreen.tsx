@@ -1,4 +1,8 @@
-function MainScreen() {
+type MainScreenProps = {
+	onStart: () => void;
+};
+
+function MainScreen(props: MainScreenProps) {
 	return (
 		<>
 			<div
@@ -11,7 +15,12 @@ function MainScreen() {
 				}}
 			>
 				<h1>Workout Tracker</h1>
-				<button style={{ width: "160px", height: "48px" }}>Start</button>
+				<button
+					onClick={props.onStart}
+					style={{ width: "160px", height: "48px" }}
+				>
+					Start
+				</button>
 			</div>
 		</>
 	);
