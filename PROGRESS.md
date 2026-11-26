@@ -4,10 +4,15 @@ Update this at the end of every session. Share it at the start of every new chat
 
 ## Where I am
 
-- Current week: 3 (backend). The 4 endpoints of the thinnest version are written in backend/src/index.ts, data kept in plain arrays (lost on restart). Week 4 (database) is next
-- Last session: 2026-11-24 - learned what a backend, an API, HTTP and JSON are. Set up backend/ (Express 5 + TypeScript + tsx), wrote GET /exercises, POST /workouts, GET /workouts/:id (with real sets and exerciseName) and POST /sets. Tested with curl.exe and the browser. Debugged: arrow function with braces and no return, wrong response shape, name shadowing, find/map mixed up, curl quoting in cmd.exe
-- Next step: 1) Run the full curl walk once more (create workout, add 2 sets, GET /workouts/1, a second workout stays separate) and commit backend/src/index.ts if not done yet. 2) Then decide with the teacher: either connect the frontend to this backend now (week 5 work, gives the first full demo from DESIGN.md "The walk") or go on to week 4 (PostgreSQL + Prisma). Roadmap order is database first, but the thinnest-version idea says an end-to-end demo early is worth it
-- Optional small cleanups, can wait: backend - validate reps/weight types in POST /sets (week 7). Frontend - Cancel in the popup does not clear the typed text; the form could become its own component later (YAGNI for now)
+- Current week: 5 (connect frontend to backend), started before week 4 on purpose. The backend still keeps data in arrays (lost on restart). Week 4 (database) comes after the thinnest version works end to end
+- Last session: 2026-11-26 - the full curl walk passed. Added the Vite proxy for /api. The Workout Page loads the exercise list from the backend. Start creates a real workout in the backend. Debugged: old variable name left behind, reading from an empty list on the first draw, reading state right after calling its setter
+- Next step:
+  1. Run `git status` first. If the 2026-11-26 work is not committed and pushed, do that before changing code
+  2. Workout Page shows the real workout: App remembers the new workout's id in state and passes it to WorkoutPage as a prop, WorkoutPage loads GET /api/workouts/:id and shows its date and sets, fakeWorkout is deleted
+  3. The Add button sends POST /api/sets, then the workout is loaded again (the backend gives the set id, so workoutSets.length + 1 goes away)
+  4. Refreshing the browser keeps the same workout (decide then how the app remembers the id)
+  5. After that, week 4: PostgreSQL + Prisma
+- Optional small cleanups, can wait: App.tsx and WorkoutPage.tsx both have a type named Workout with different fields (look at this during step 2). The console.log in App.tsx can be deleted. No error handling on fetch yet. Backend - validate reps/weight types in POST /sets (week 7). The popup form could become its own component later (YAGNI for now)
 
 ## Day 1 checklist
 
@@ -42,6 +47,10 @@ Update this at the end of every session. Share it at the start of every new chat
 - Week 3: GET /workouts/:id (route param converted with Number, 404 when missing, returns the workout plus its sets)
 - Week 3: POST /sets (body read with express.json(), 404 if the workout or the exercise does not exist, status 201)
 - Week 3: sets in the GET response built with .filter (sets of this workout) and .map (add exerciseName with .find)
+- Week 3: full walk of the 4 endpoints passed with curl
+- Week 5: Vite proxy in frontend/vite.config.ts sends /api/... to port 3000 and removes /api
+- Week 5: Workout Page loads the exercises with useEffect and fetch, the hand-written list is gone from the frontend, the chosen id is set from the loaded data
+- Week 5: Start sends POST /api/workouts, reads the JSON with a type (id, date, finished), then shows the Workout Page
 
 ## Decisions made
 
@@ -85,6 +94,8 @@ Update this at the end of every session. Share it at the start of every new chat
 - POST /sets only checks that the workout and the exercise exist. Checking reps/weight types waits for week 7
 - Counters are named newWorkoutId and newSetsId so they do not clash with names from req.body
 - Testing without the frontend: browser for GET, curl.exe for POST. In cmd.exe wrap the JSON in double quotes and escape the inner ones with a backslash (Thunder Client in VS Code is the no-quoting alternative)
+- Connect the frontend to the backend before adding the database, to get an end-to-end demo early
+- In development the frontend calls /api/... and the Vite proxy passes it to the backend, so no CORS setup is needed for now (the published setup is decided in week 8)
 
 ## Things I learned (in my own words)
 
@@ -93,5 +104,6 @@ Update this at the end of every session. Share it at the start of every new chat
 
 ## Open questions / things that confused me
 
-- None right now (the props question was answered in week 2)
+- Worth a quick recap: which server gets the request first (Vite on 5173, then Express on 3000); state does not change on the line right after calling its setter; how to write a type and attach it to a value
+- Suggested points for week 5 (write them in your words): what a proxy does and why the browser needs it here; GET vs POST; when fetch goes in useEffect and when in a click; what async and await do; what response.json() does; why an empty list on the first draw matters; why data from the backend gets a type
 - Suggested points for your own "Things I learned" (write them in your words): what a backend, an API, HTTP and JSON are; what a route is (method + path); req.params vs req.body; why express.json() is needed; status codes 201 and 404; why an arrow function with braces needs return; what .filter, .map and .find each do and how they combine; what ?. does; why TypeScript did not catch logic bugs

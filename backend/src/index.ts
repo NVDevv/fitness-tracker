@@ -74,7 +74,6 @@ app.get("/workouts/:id", (req, res) => {
 		(correctSet) => correctSet.workoutId === workoutById.id,
 	);
 
-	// map: turn each set of this workout into a new object for the response
 	const usersSets = correctSets.map((workingSet) => {
 		const exercise = exercises.find(
 			(exercise) => exercise.id === workingSet.exerciseId,

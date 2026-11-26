@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Workout = {
 	id: number;
@@ -19,25 +19,6 @@ type Exercise = {
 	id: number;
 	name: string;
 };
-
-const exercises: Exercise[] = [
-	{
-		id: 1,
-		name: "Bench Press",
-	},
-	{
-		id: 2,
-		name: "Incline Press",
-	},
-	{
-		id: 3,
-		name: "Flyes",
-	},
-	{
-		id: 4,
-		name: "Wide Chest Machine",
-	},
-];
 
 const fakeWorkout: Workout = {
 	id: 1,
@@ -97,18 +78,29 @@ const fakeWorkout: Workout = {
 };
 
 function WorkoutPage() {
+	const [currentExercises, setCurrentExercises] = useState<Exercise[]>([]);
+
+	const [chosenExerciseId, setChosenExerciseId] = useState<number>(0);
+
 	const [workoutSets, setWorkoutSets] = useState<WorkoutSet[]>(
 		fakeWorkout.sets,
 	);
 
-	const [chosenExerciseId, setChosenExerciseId] = useState<number>(
-		exercises[0].id,
-	);
-
 	const [repsText, setRepsText] = useState<string>("");
+
 	const [weightText, setWeightText] = useState<string>("");
 
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+
+	useEffect(() => {
+		async function loadExercises() {
+			const response = await fetch("/api/exercises");
+			const data: Exercise[] = await response.json();
+			setCurrentExercises(data);
+			setChosenExerciseId(data[0].id);
+		}
+		loadExercises();
+	}, []);
 
 	return (
 		<>
@@ -138,7 +130,7 @@ function WorkoutPage() {
 						}
 						value={chosenExerciseId}
 					>
-						{exercises.map((exercise) => (
+						{currentExercises.map((exercise) => (
 							<option key={exercise.id} value={exercise.id}>
 								{exercise.name}
 							</option>
@@ -162,7 +154,7 @@ function WorkoutPage() {
 					/>
 					<button
 						onClick={() => {
-							const exerciseName: string | undefined = exercises.find(
+							const exerciseName: string | undefined = currentExercises.find(
 								(exercise) => exercise.id === chosenExerciseId,
 							)?.name;
 

@@ -5,6 +5,13 @@ import { useState } from "react";
 
 type Page = "MainScreen" | "WorkoutPage";
 
+type Workout = {
+	id: number;
+	date: string;
+	finished: boolean;
+};
+
+
 function App() {
 	const [page, setPage] = useState<Page>("MainScreen");
 
@@ -21,7 +28,14 @@ function App() {
 			>
 				{page === "MainScreen" ? (
 					<MainScreen
-						onStart={() => {
+						onStart={async () => {
+
+							const response = await fetch("/api/workouts", {
+								method: "POST",
+							});
+							const workout: Workout = await response.json();
+							console.log({ workout });
+
 							setPage("WorkoutPage");
 						}}
 					/>
