@@ -15,6 +15,7 @@ type Workout = {
 function App() {
 	const [page, setPage] = useState<Page>("MainScreen");
 
+	const [workoutId, setWorkoutId] = useState<number | null>(null);
 	return (
 		<>
 			<div
@@ -26,21 +27,20 @@ function App() {
 					gap: "12px",
 				}}
 			>
-				{page === "MainScreen" ? (
+				{page === "MainScreen" || !workoutId ? (
 					<MainScreen
 						onStart={async () => {
-
 							const response = await fetch("/api/workouts", {
 								method: "POST",
 							});
 							const workout: Workout = await response.json();
-							console.log({ workout });
+							setWorkoutId(workout.id);
 
 							setPage("WorkoutPage");
 						}}
 					/>
 				) : (
-					<WorkoutPage />
+					<WorkoutPage workoutId={workoutId} />
 				)}
 			</div>
 		</>

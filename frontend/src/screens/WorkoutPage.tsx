@@ -20,77 +20,26 @@ type Exercise = {
 	name: string;
 };
 
-const fakeWorkout: Workout = {
-	id: 1,
-	date: "2026-11-16",
-	finished: false,
-	sets: [
-		{
-			id: 1,
-			exerciseId: 1,
-			exerciseName: "Bench Press",
-			reps: 10,
-			weight: 100,
-		},
-		{
-			id: 2,
-			exerciseId: 2,
-			exerciseName: "Incline Press",
-			reps: 10,
-			weight: 40,
-		},
-		{
-			id: 3,
-			exerciseId: 3,
-			exerciseName: "Flyes",
-			reps: 10,
-			weight: 25,
-		},
-		{
-			id: 4,
-			exerciseId: 1,
-			exerciseName: "Bench Press",
-			reps: 10,
-			weight: 115,
-		},
-		{
-			id: 5,
-			exerciseId: 2,
-			exerciseName: "Incline Press",
-			reps: 10,
-			weight: 35,
-		},
-		{
-			id: 6,
-			exerciseId: 3,
-			exerciseName: "Flyes",
-			reps: 10,
-			weight: 25,
-		},
-		{
-			id: 7,
-			exerciseId: 4,
-			exerciseName: "Wide Chest Machine",
-			reps: 10,
-			weight: 90,
-		},
-	],
+type WorkoutIdPropType = {
+	workoutId: number;
 };
 
-function WorkoutPage() {
+function WorkoutPage(props: WorkoutIdPropType) {
 	const [currentExercises, setCurrentExercises] = useState<Exercise[]>([]);
 
 	const [chosenExerciseId, setChosenExerciseId] = useState<number>(0);
 
-	const [workoutSets, setWorkoutSets] = useState<WorkoutSet[]>(
-		fakeWorkout.sets,
-	);
+	const [workoutSets, setWorkoutSets] = useState<WorkoutSet[]>([]);
 
 	const [repsText, setRepsText] = useState<string>("");
 
 	const [weightText, setWeightText] = useState<string>("");
 
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+
+	const [currentDate, setCurrentDate] = useState<string>("");
+
+	const [reloadCount, setReloadCount] = useState<number>(0);
 
 	useEffect(() => {
 		async function loadExercises() {
@@ -102,9 +51,19 @@ function WorkoutPage() {
 		loadExercises();
 	}, []);
 
+	useEffect(() => {
+		async function loadWorkout() {
+			const response = await fetch(`/api/workouts/${props.workoutId}`);
+			const data: Workout = await response.json();
+			setCurrentDate(data.date);
+			setWorkoutSets(data.sets);
+		}
+		loadWorkout();
+	}, [props.workoutId, reloadCount]);
+
 	return (
 		<>
-			<h1>{fakeWorkout.date}</h1>
+			<h1>{currentDate}</h1>
 			<ul>
 				{workoutSets.map((workoutSet) => (
 					<li key={workoutSet.id}>
@@ -153,20 +112,18 @@ function WorkoutPage() {
 						}}
 					/>
 					<button
-						onClick={() => {
-							const exerciseName: string | undefined = currentExercises.find(
-								(exercise) => exercise.id === chosenExerciseId,
-							)?.name;
-
-							const newSet: WorkoutSet = {
-								id: workoutSets.length + 1,
-								exerciseId: chosenExerciseId,
-								exerciseName: exerciseName || "Exercise not found",
-								reps: Number(repsText),
-								weight: Number(weightText),
-							};
-
-							setWorkoutSets([...workoutSets, newSet]);
+						onClick={async () => {
+							await fetch("/api/sets", {
+								method: "POST",
+								headers: { "Content-Type": "application/json" },
+								body: JSON.stringify({
+									workoutId: props.workoutId,
+									exerciseId: chosenExerciseId,
+									reps: Number(repsText),
+									weight: Number(weightText),
+								}),
+							});
+							setReloadCount(reloadCount + 1);
 
 							setIsFormOpen(false);
 							setRepsText("");
