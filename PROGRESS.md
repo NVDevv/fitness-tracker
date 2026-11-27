@@ -5,12 +5,14 @@ Update this at the end of every session. Share it at the start of every new chat
 ## Where I am
 
 - Current week: 4 (database). Week 5 was done first on purpose, and the thinnest version now works end to end. The backend still keeps data in arrays (lost on restart)
-- Last session: 2026-11-27 - finished the thinnest version. The Workout Page shows the real workout, Add saves sets in the backend, and a refresh keeps the same workout. Debugged: passing and receiving a prop, a wrong Content-Type header, reloadCount++ handing over the old value, saving the old state value to localStorage
+- Last session: 2026-11-27 to 28 - finished the thinnest version (the Workout Page shows the real workout, Add saves sets, a refresh keeps the same workout). Started week 4: PostgreSQL, the fitness database, Prisma packages. Debugged: passing and receiving a prop, a wrong Content-Type header, reloadCount++ handing over the old value, saving the old state value to localStorage
 - Next step:
-  1. Run `git status` first. If the 2026-11-27 work is not committed and pushed, do that before changing code
-  2. Install PostgreSQL (it was not installed on 2026-11-27) and check that SQL Shell (psql) connects. Keep the password out of the code and the chat
-  3. Add Prisma to backend/ and connect it to the database (the connection text goes in a .env file that Git ignores)
-  4. Describe the tables as Prisma models, then replace the arrays one route at a time (the routes should barely change)
+  1. Run `git status` first. If backend/package.json, backend/package-lock.json and PROGRESS.md are not committed and pushed, do that before changing anything
+  2. Add .env to backend/.gitignore BEFORE any password is written to a file (there is no .gitignore in the root folder)
+  3. In backend/ run `npx prisma init --datasource-provider postgresql --output ../generated/prisma --no-skills` (it makes prisma/schema.prisma, prisma7.config.ts and .env)
+  4. Put the connection text for the fitness database in .env: postgresql://postgres:PASSWORD@localhost:5432/fitness?schema=public (characters like @ # : / in the password need encoding). The real password never goes in the chat or in Git
+  5. Prisma 7 needs "type": "module" in backend/package.json, and tsconfig.json may need to change with it (not tested yet)
+  6. Describe Workout, Set and Exercise as Prisma models, run the first migration, then replace the arrays one route at a time (the routes should barely change)
 - Optional small cleanups, can wait: App.tsx and WorkoutPage.tsx both have a type named Workout with different fields. WorkoutIdPropType would be clearer as WorkoutPageProps. No error handling on fetch yet (after a backend restart the saved id gives a blank page, delete the workoutId row in Local storage). Backend - validate reps/weight types in POST /sets (week 7). The popup form could become its own component later (YAGNI for now)
 
 ## Day 1 checklist
@@ -55,6 +57,9 @@ Update this at the end of every session. Share it at the start of every new chat
 - Week 5: Add sends POST /api/sets (Content-Type header and JSON.stringify), then reloadCount makes the workout load again
 - Week 5: the workout id is saved in localStorage, the page state and the Page type are gone
 - Thinnest version works end to end (the demo in DESIGN.md)
+- Week 4: PostgreSQL 19 installed and running, SQL Shell (psql) connects
+- Week 4: database fitness created with CREATE DATABASE
+- Week 4: Prisma 7.10.1 installed in backend/ (prisma, @prisma/client, @prisma/adapter-pg, pg, dotenv), prisma init not run yet
 
 ## Decisions made
 
@@ -104,6 +109,8 @@ Update this at the end of every session. Share it at the start of every new chat
 - The workout id alone decides the screen: 0 shows the Main Screen, any other number shows the Workout Page. A page state comes back when History and Progress arrive
 - After Add, the Workout Page asks the backend for the workout again instead of adding to its own list, and the backend gives the set id
 - Until Finish workout exists there is no button back to the Main Screen
+- Prisma version 7, not 8 (8 was only a release candidate in November 2026). Use the version 7 docs: https://www.prisma.io/docs/v7/prisma-orm/add-to-existing-project/postgresql
+- Development uses a local PostgreSQL database named fitness
 
 ## Things I learned (in my own words)
 
@@ -114,5 +121,6 @@ Update this at the end of every session. Share it at the start of every new chat
 
 - Worth a quick recap: which server gets the request first (Vite on 5173, then Express on 3000); state does not change on the line right after calling its setter (came up twice on 2026-11-27); how to write a type and attach it to a value; how a prop travels (label, type, the whole props object, props.label)
 - Suggested points for 2026-11-27 (write them in your words): what a prop is; why changing something inside [ ] makes useEffect run again; what method, headers and body do in a POST; why reloadCount++ was a bug; what localStorage is, why it holds only text and why a refresh needs it
+- Suggested points for week 4 so far (write them in your words): what a database, a table and a row are; why arrays lose data on a restart; what SQL is and what CREATE DATABASE does; what @7 after a package name means
 - Suggested points for week 5 (write them in your words): what a proxy does and why the browser needs it here; GET vs POST; when fetch goes in useEffect and when in a click; what async and await do; what response.json() does; why an empty list on the first draw matters; why data from the backend gets a type
 - Suggested points for your own "Things I learned" (write them in your words): what a backend, an API, HTTP and JSON are; what a route is (method + path); req.params vs req.body; why express.json() is needed; status codes 201 and 404; why an arrow function with braces needs return; what .filter, .map and .find each do and how they combine; what ?. does; why TypeScript did not catch logic bugs
