@@ -3,19 +3,18 @@ import MainScreen from "./screens/MainScreen.tsx";
 import WorkoutPage from "./screens/WorkoutPage.tsx";
 import { useState } from "react";
 
-type Page = "MainScreen" | "WorkoutPage";
-
 type Workout = {
 	id: number;
 	date: string;
 	finished: boolean;
 };
 
-
 function App() {
-	const [page, setPage] = useState<Page>("MainScreen");
+	const [workoutId, setWorkoutId] = useState<number>(
+		Number(localStorage.getItem("workoutId")),
+	);
 
-	const [workoutId, setWorkoutId] = useState<number | null>(null);
+
 	return (
 		<>
 			<div
@@ -27,7 +26,7 @@ function App() {
 					gap: "12px",
 				}}
 			>
-				{page === "MainScreen" || !workoutId ? (
+				{!workoutId ? (
 					<MainScreen
 						onStart={async () => {
 							const response = await fetch("/api/workouts", {
@@ -36,7 +35,7 @@ function App() {
 							const workout: Workout = await response.json();
 							setWorkoutId(workout.id);
 
-							setPage("WorkoutPage");
+							localStorage.setItem("workoutId", String(workout.id));
 						}}
 					/>
 				) : (
